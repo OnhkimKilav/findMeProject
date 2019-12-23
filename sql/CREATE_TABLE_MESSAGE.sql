@@ -6,8 +6,8 @@ CREATE TABLE message (
     date_read      TIMESTAMP,
     user_from_id   NUMBER,
     CONSTRAINT fk_user_from_id FOREIGN KEY ( user_from_id )
-        REFERENCES "user" ( user_id ),
+        REFERENCES USERS ( USERS_ID ),
     user_to_id     NUMBER,
     CONSTRAINT fk_user_to_id FOREIGN KEY ( user_to_id )
-        REFERENCES "user" ( user_id )
+        REFERENCES USERS ( USERS_ID )
 );

@@ -5,58 +5,60 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USERS")
 public class User {
     @Id
+    @Column(name = "USERS_ID")
     @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "FIRST_NAME")
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "LAST_NAME")
     private String lastName;
 
-    @Column(name = "phone")
+    @Column(name = "PHONE")
     private String phone;
 
     //TODO from existed data
-    @Column(name = "country")
+    @Column(name = "COUNTRY")
     private String country;
 
-    @Column(name = "city")
+    @Column(name = "CITY")
     private String city;
 
 
-    @Column(name = "age")
+    @Column(name = "AGE")
     private Integer age;
 
-    @Column(name = "date_registered")
+    @Column(name = "DATE_REGISTERED")
     private Date dateRegistered;
 
-    @Column(name = "date_last_active")
+    @Column(name = "DATE_LAST_ACTIVE")
     private Date dateLastActive;
 
     //TODO enum
-    @Column(name = "relationship_status")
+    @Column(name = "RELATIONSHIP_STATUS")
     private String relationshipStatus;
 
-    @Column(name = "religion")
+    @Column(name = "RELIGION")
     private String religion;
 
     //TODO from existed data
-    @Column(name = "school")
+    @Column(name = "SCHOOL")
     private String school;
 
-    @Column(name = "university")
+    @Column(name = "UNIVERSITY")
     private String university;
 
-
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "MESSAGES_SENT")
+    @OneToMany(mappedBy="userFrom",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messagesSent;
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "MESSAGES_RECEIVED")
+    @OneToMany(mappedBy="userTo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messagesReceived;
 
     //private String[] interests;
@@ -158,7 +160,7 @@ public class User {
         this.school = school;
     }
 
-    public String getUnivesrity() {
+    public String getUniversity() {
         return university;
     }
 

@@ -5,5 +5,5 @@ CREATE TABLE post (
     date_posted      TIMESTAMP,
     user_posted_id   NUMBER,
     CONSTRAINT fk_user_posted_id FOREIGN KEY ( user_posted_id )
-        REFERENCES "user" ( user_id )
+        REFERENCES USERS ( USERS_ID )
 );

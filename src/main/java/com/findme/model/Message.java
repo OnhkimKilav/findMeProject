@@ -5,29 +5,30 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "message")
+@Table(name = "MESSAGE")
 public class Message {
 
     @Id
+    @Column(name = "MESSAGE_ID")
     @SequenceGenerator(name = "MESSAGE_SEQ", sequenceName = "MESSAGE_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_SEQ")
     private Long id;
 
-    @Column(name = "text")
+    @Column(name = "TEXT")
     private String text;
 
-    @Column(name = "date_sent")
+    @Column(name = "DATE_SENT")
     private Date dateSent;
 
-    @Column(name = "date_read")
+    @Column(name = "DATE_READ")
     private Date dateRead;
 
-    @ManyToOne
-    @JoinColumn(name="user_from_id", nullable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="USER_FROM_ID", nullable=false,unique=true)
     private User userFrom;
 
-    @ManyToOne
-    @JoinColumn(name="user_to_id", nullable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="USER_TO_ID", nullable=false,unique=true)
     private User userTo;
 
     public Long getId() {

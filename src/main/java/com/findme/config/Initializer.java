@@ -1,4 +1,4 @@
-package com.findme.service;
+package com.findme.config;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;

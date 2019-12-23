@@ -4,21 +4,22 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "post")
+@Table(name = "POST")
 public class Post {
     @Id
+    @Column(name = "POST_ID")
     @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
     private Long id;
 
-    @Column(name = "post")
+    @Column(name = "POST")
     private String post;
 
-    @Column(name = "date_posted")
+    @Column(name = "DATE_POSTED")
     private Date datePosted;
 
-    @ManyToOne
-    @JoinColumn(name="user_posted_id", nullable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="USER_POSTED_ID", nullable=false)
     private User userPosted;
     //TODO
     //levels permissions

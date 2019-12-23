@@ -1,4 +1,4 @@
-package com.findme.service;
+package com.findme.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +28,7 @@ import javax.persistence.EntityManagerFactory;
 @EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
 
-    /*@Autowired
+    @Autowired
     private ApplicationContext applicationContext;
 
     @Bean
@@ -53,7 +53,7 @@ public class AppConfig implements WebMvcConfigurer {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(springTemplateEngine());
         registry.viewResolver(resolver);
-    }*/
+    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
