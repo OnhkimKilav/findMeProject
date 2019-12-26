@@ -1,13 +1,14 @@
 package com.findme.controller;
 
 import com.findme.model.User;
-import com.findme.service.Service;
+import com.findme.service.UserService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,26 +20,41 @@ import java.io.IOException;
 
 @Controller
 public class UserController {
-    private Service service;
+    private UserService service;
 
     @Autowired
-    public UserController(Service service) {
+    public UserController(UserService service) {
         this.service = service;
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
-    public String profile(Model model, @PathVariable String userId){
-        User user = (User)service.findById(User.class, Long.valueOf(userId));
+    public String profile(Model model, @PathVariable String userId) {
+        User user = service.findById(Long.valueOf(userId));
         model.addAttribute("user", user);
         return "profile";
     }
 
+    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
+    public ResponseEntity<String> registerUser(@ModelAttribute User user) {
+        try {
+            if (service.findByPhone(user.getPhone()) != 0)
+                return new ResponseEntity<>("This phone number is already registered", HttpStatus.NOT_FOUND);
+            else if(service.findByEmail(user.getEmail()) != 0) {
+                return new ResponseEntity<>("This email is already registered", HttpStatus.NOT_FOUND);
+            }
+            else service.save(user);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<String>("Ok", HttpStatus.OK);
+    }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/saveUser", produces = "text/plain")
+
+    @RequestMapping(method = RequestMethod.POST, value = "/saveUser", produces = "text/plain")
     public ResponseEntity<String> saveUser(HttpServletRequest req) throws IOException {
         User user = null;
         try {
-            user = (User) service.save(readValuesPostman(req));
+            user = service.save(readValuesPostman(req));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }
@@ -49,7 +65,7 @@ public class UserController {
     public ResponseEntity<String> findUser(HttpServletRequest req) throws IOException {
         User user = null;
         try {
-            user = (User) service.findById(User.class, Long.parseLong(req.getParameter("id")));
+            user = service.findById(Long.parseLong(req.getParameter("id")));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }
@@ -59,7 +75,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteUser", produces = "text/plain")
     public ResponseEntity<String> deleteUser(HttpServletRequest req) {
         try {
-            service.delete(User.class, Long.parseLong(req.getParameter("id")));
+            service.delete(Long.parseLong(req.getParameter("id")));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }

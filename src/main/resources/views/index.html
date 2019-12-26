@@ -4,12 +4,77 @@
     <meta charset="UTF-8">
     <title>Find me</title>
 </head>
+<header>Header</header>
 <body>
-    <div class="container">
-        <div class="starter-template">
-            <h1>Welcome to Find me!</h1>
-        </div>
+<h1>Welcome to Find me!</h1>
+Some Text
 
-    </div>
+<form id="registration-form">
+    <p><input type="text" name="firstName" placeholder="First name" required></p>
+    <p><input type="text" name="lastName" placeholder="Last name" required></p>
+    <p><input type="email" name="email" placeholder="Email" required></p>
+    <p><input type="text" name="phone" placeholder="Phone" required></p>
+    <p><input type="text" name="country" placeholder="Country" required></p>
+    <p><input type="text" name="city" placeholder="City" required></p>
+    <p><input type="number" name="age" placeholder="Age" required></p>
+    <p><input type="text" name="relationshipStatus" placeholder="Relationship status"></p>
+    <p><input type="text" name="religion" placeholder="Religion"></p>
+    <p><input type="text" name="school" placeholder="School"></p>
+    <p><input type="text" name="university" placeholder="University"></p>
+
+
+    <button type="submit">Registration</button>
+</form>
+
+
+<button id="text-ajax">Click here!</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </body>
+
+<footer>Footer</footer>
+
+<script>
+
+    //first javascript code
+    //first jquery usage
+
+    //selector by id = #
+    //selector by class = .
+
+    //alert($("#text-ajax").text());
+
+    $("#text-ajax").click(function () {
+        $.ajax({
+            type: "GET",
+            url: "/test-ajax",
+            data: {},
+            success: function success() {
+                debugger;
+                alert("success!");
+            },
+            error: function error(xhr) {
+                debugger;
+                alert(xhr.responseText);
+            }
+        });
+    });
+
+    $("#registration-form").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/register-user",
+            data: $('#registration-form').serialize(),
+            success: function success(data) {
+                alert("Congratulations!'\n'You are registration");
+            },
+            error: function error(xhr) {
+                debugger;
+                alert(xhr.responseText);
+            }
+        });
+    });
+
+</script>
 </html>
