@@ -3,6 +3,7 @@ package com.findme.controller;
 import com.findme.model.User;
 import com.findme.service.UserService;
 import com.google.gson.Gson;
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,13 @@ public class UserController {
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
     public String profile(Model model, @PathVariable String userId) {
         User user = service.findById(Long.valueOf(userId));
-        model.addAttribute("user", user);
-        return "profile";
+        if (user == null) {
+            model.addAttribute("exception", new ObjectNotFoundException("Object with this id " + userId + " not found"));
+            return "profileException";
+        } else {
+            model.addAttribute("user", user);
+            return "profile";
+        }
     }
 
     @RequestMapping(path = "/register-user", method = RequestMethod.POST)
@@ -39,10 +45,9 @@ public class UserController {
         try {
             if (service.findByPhone(user.getPhone()) != 0)
                 return new ResponseEntity<>("This phone number is already registered", HttpStatus.NOT_FOUND);
-            else if(service.findByEmail(user.getEmail()) != 0) {
+            else if (service.findByEmail(user.getEmail()) != 0) {
                 return new ResponseEntity<>("This email is already registered", HttpStatus.NOT_FOUND);
-            }
-            else service.save(user);
+            } else service.save(user);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

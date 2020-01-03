@@ -21,6 +21,7 @@
         <div class="text">
             <p th:text="${user.firstName}"></p>
             <p th:text="${user.lastName}"></p>
+            <p th:text="${user.email}"></p>
             <p th:text="${user.phone}"></p>
             <p th:text="${user.country}"></p>
             <p th:text="${user.city}"></p>
@@ -35,9 +36,22 @@
     </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </body>
 
+<script>
+    $.ajax({
+        type: "GET",
+        url: "/user/{userId}",
+        data: {},
+        error: function error(xhr) {
+            alert(xhr.responseText);
+        }
+    });
+</script>
+
 <style>
+
     .left {
         float: left;
         width: 200px;
