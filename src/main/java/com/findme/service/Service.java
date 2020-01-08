@@ -2,7 +2,7 @@ package com.findme.service;
 
 
 public interface Service<T> {
-    T save(T t);
+    T save(T t) throws RuntimeException;
 
     T findById(Long id);
 

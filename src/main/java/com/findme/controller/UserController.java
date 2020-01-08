@@ -5,6 +5,7 @@ import com.findme.service.UserService;
 import com.google.gson.Gson;
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,13 +44,9 @@ public class UserController {
     @RequestMapping(path = "/register-user", method = RequestMethod.POST)
     public ResponseEntity<String> registerUser(@ModelAttribute User user) {
         try {
-            if (service.findByPhone(user.getPhone()) != 0)
-                return new ResponseEntity<>("This phone number is already registered", HttpStatus.NOT_FOUND);
-            else if (service.findByEmail(user.getEmail()) != 0) {
-                return new ResponseEntity<>("This email is already registered", HttpStatus.NOT_FOUND);
-            } else service.save(user);
+            service.save(user);
         } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<String>("Ok", HttpStatus.OK);
     }
@@ -63,7 +60,7 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }
-        return new ResponseEntity<String>("Ok : " + user.toString(), HttpStatus.OK);
+        return new ResponseEntity<String>("Ok : " + user.toString(), HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/findUser", produces = "text/plain")
