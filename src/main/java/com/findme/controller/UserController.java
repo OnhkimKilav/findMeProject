@@ -1,5 +1,6 @@
 package com.findme.controller;
 
+import com.findme.exception.BadRequestException;
 import com.findme.model.User;
 import com.findme.service.UserService;
 import com.google.gson.Gson;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @Controller
 public class UserController {
@@ -45,8 +47,10 @@ public class UserController {
     public ResponseEntity<String> registerUser(@ModelAttribute User user) {
         try {
             service.save(user);
+        }catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<String>("Ok", HttpStatus.OK);
     }
