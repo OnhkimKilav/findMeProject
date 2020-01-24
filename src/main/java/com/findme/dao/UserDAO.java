@@ -4,15 +4,16 @@ import com.findme.model.User;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
-import java.util.Date;
 
 @Repository
 @Transactional
-@Scope( proxyMode = ScopedProxyMode.TARGET_CLASS )
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserDAO implements DAO<User> {
 
     @PersistenceContext
@@ -48,5 +49,17 @@ public class UserDAO implements DAO<User> {
     public Integer userByEmail(String email) {
         Query query = entityManager.createNativeQuery("SELECT * FROM USERS WHERE EMAIL = ?").setParameter(1, email);
         return query.executeUpdate();
+    }
+
+    public User checkLogIn(String email, String password) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM USERS WHERE EMAIL = ? AND PASSWORD = ?", User.class)
+                .setParameter(1, email)
+                .setParameter(2, password);
+        query.executeUpdate();
+        try {
+            return (User) query.getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
     }
 }

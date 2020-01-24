@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @Controller
 public class UserController {
@@ -29,6 +30,32 @@ public class UserController {
     @Autowired
     public UserController(UserService service) {
         this.service = service;
+    }
+
+    @RequestMapping(path = "/logIn", method = RequestMethod.GET)
+    public ResponseEntity<String> logIn(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        try{
+            User user = service.logIn(request.getParameter("email"), request.getParameter("password"), (User)session.getAttribute("user"));
+            session.setAttribute("user", user);
+        }catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>("Ok", HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/logOut", method = RequestMethod.GET)
+    public ResponseEntity<String> logOut(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        try{
+            service.logOut((User)session.getAttribute("user"));
+            session.invalidate();
+        }catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>("Ok", HttpStatus.OK);
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
@@ -47,7 +74,7 @@ public class UserController {
     public ResponseEntity<String> registerUser(@ModelAttribute User user) {
         try {
             service.save(user);
-        }catch (BadRequestException bre) {
+        } catch (BadRequestException bre) {
             return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);

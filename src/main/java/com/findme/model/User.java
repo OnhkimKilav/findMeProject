@@ -22,6 +22,9 @@ public class User {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "PASSWORD")
+    private String password;
+
     @Column(name = "PHONE")
     private String phone;
 
@@ -195,12 +198,22 @@ public class User {
         this.messagesReceived = messagesReceived;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +

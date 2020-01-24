@@ -19,6 +19,20 @@ public class UserService implements Service<User> {
         this.userDAO = userDAO;
     }
 
+    public User logIn(String email, String password, User userSession){
+        User user = userDAO.checkLogIn(email, password);
+        if(user == null)
+            throw new BadRequestException("You enter not correct email or password");
+        if(userSession != null)
+            throw new BadRequestException("Session is already create");
+        return user;
+    }
+
+    public void logOut(User user) {
+        if (user == null)
+            throw new BadRequestException("You are not logged in at the moment");
+    }
+
     @Override
     public User save(User user) throws RuntimeException {
         if (userDAO.userByPhone(user.getPhone()) != 0)
