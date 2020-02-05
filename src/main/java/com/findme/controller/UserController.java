@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Controller
 public class UserController {
@@ -32,12 +35,76 @@ public class UserController {
         this.service = service;
     }
 
+    @RequestMapping(path = "/getOutcomeRequest", method = RequestMethod.GET)
+    public String getOutcomeRequest(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        ArrayList<User> users;
+        try {
+            users = service.getOutcomeRequests(session, request.getParameter("userId"));
+        } catch (BadRequestException bre) {
+            model.addAttribute("exception", bre.getMessage());
+            return "profileException";
+        } catch (Exception e) {
+            model.addAttribute("exception", e.getMessage());
+            return "profileException";
+        }
+        model.addAttribute("user", service.findById(Long.valueOf(request.getParameter("userId"))));
+        model.addAttribute("usersOutcome", users);
+        return "profile";
+    }
+
+    @RequestMapping(path = "/getIncomeRequest", method = RequestMethod.GET)
+    public String getIncomeRequest(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        ArrayList<User> users;
+        try {
+            users = service.getIncomeRequests(session, request.getParameter("userId"));
+        } catch (BadRequestException bre) {
+            model.addAttribute("exception", bre.getMessage());
+            return "profileException";
+        } catch (Exception e) {
+            model.addAttribute("exception", e.getMessage());
+            return "profileException";
+        }
+        model.addAttribute("user", service.findById(Long.valueOf(request.getParameter("userId"))));
+        model.addAttribute("usersIncome", users);
+        return "profile";
+    }
+
+    @RequestMapping(path = "/addRelationship", method = RequestMethod.GET)
+    public ResponseEntity<String> addRelationship(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        try {
+            service.addRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"));
+        } catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>("Ok", HttpStatus.OK);
+    }
+
+    //http://localhost:8080/updateRelationship?userIdFrom=161&userIdTo=141&status=friends
+
+    @RequestMapping(path = "/updateRelationship", method = RequestMethod.GET)
+    public ResponseEntity<String> updateRelationship(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        try {
+            service.updateRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"), request.getParameter("status"));
+        } catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>("Ok", HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/logIn", method = RequestMethod.GET)
     public ResponseEntity<String> logIn(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        try{
-            User user = service.logIn(request.getParameter("email"), request.getParameter("password"), (User)session.getAttribute("user"));
+        try {
+            User user = service.logIn(request.getParameter("email"), request.getParameter("password"), (User) session.getAttribute("user"));
             session.setAttribute("user", user);
-        }catch (BadRequestException bre) {
+        } catch (BadRequestException bre) {
             return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -47,10 +114,10 @@ public class UserController {
 
     @RequestMapping(path = "/logOut", method = RequestMethod.GET)
     public ResponseEntity<String> logOut(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        try{
-            service.logOut((User)session.getAttribute("user"));
+        try {
+            service.logOut((User) session.getAttribute("user"));
             session.invalidate();
-        }catch (BadRequestException bre) {
+        } catch (BadRequestException bre) {
             return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);

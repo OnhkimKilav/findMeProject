@@ -10,14 +10,9 @@
 
     <div class="left">
         <h1>Photo</h1>
-
-        <div>
-            <button class="btn">Send message</button>
-        </div>
     </div>
 
     <div class="right">
-        Styled text here
         <div class="text">
             <p th:text="${user.firstName}"></p>
             <p th:text="${user.lastName}"></p>
@@ -34,6 +29,22 @@
             <p th:text="${user.school}"></p>
             <p th:text="${user.university}"></p>
         </div>
+
+        <div>
+            <ul th:each="user : ${usersIncome}" class="hr">
+                <li th:text="${user[0]}"></li>
+                <li th:text="${user[1]}"></li>
+                <li th:text="${user[2]}"></li>
+            </ul>
+        </div>
+
+        <div>
+            <ul th:each="user : ${usersOutcome}" class="hr">
+                <li th:text="${user[0]}"></li>
+                <li th:text="${user[1]}"></li>
+                <li th:text="${user[2]}"></li>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -41,6 +52,7 @@
 </body>
 
 <script>
+
     $.ajax({
         type: "GET",
         url: "/user/{userId}",
@@ -49,9 +61,36 @@
             alert(xhr.responseText);
         }
     });
+
+    $.ajax({
+        type: "GET",
+        url: "/getIncomeRequest",
+        data: {},
+        error: function error(xhr) {
+            alert(xhr.responseText);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/getOutcomeRequest",
+        data: {},
+        error: function error(xhr) {
+            alert(xhr.responseText);
+        }
+    });
 </script>
 
 <style>
+    ul.hr {
+        margin: 0; /* Обнуляем значение отступов */
+        padding: 4px; /* Значение полей */
+    }
+    ul.hr li {
+        display: inline; /* Отображать как строчный элемент */
+        margin-right: 5px; /* Отступ слева */
+        padding: 3px; /* Поля вокруг текста */
+    }
 
     .left {
         float: left;
