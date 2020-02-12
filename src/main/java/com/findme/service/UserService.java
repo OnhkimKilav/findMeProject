@@ -72,6 +72,12 @@ public class UserService implements Service<User> {
             throw new BadRequestException("You cannot add yourself as a friend");
         else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom)))
             throw new BadRequestException("To add friends under this user you need to log in");
+        else if (userDAO.getExistenceRelationship(userIdFrom, userIdTo) == 1) {
+            if (!(userDAO.getStatusRelationship(userIdFrom, userIdTo).equals(String.valueOf(RelationshipStatus.NOT_FRIENDS))))
+                throw new BadRequestException("Request to this user has already been sent");
+            userDAO.updateRelationship(userIdFrom, userIdTo, String.valueOf(RelationshipStatus.REQUEST_SENDED));
+            return;
+        }
         userDAO.addRelationship(userIdFrom, userIdTo);
     }
 
@@ -90,17 +96,15 @@ public class UserService implements Service<User> {
             //1. I'm sender
             //2. I'm not recipient
             //3. Status relationship in the DB should by REQUEST_SENDED
-            //4. Status of URL should by NOT_FRIEND
         else if ((String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
-                && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo))
-                && (!(userDAO.getStatusRelationship(userIdFrom, userIdTo).equals(String.valueOf(RelationshipStatus.REQUEST_SENDED)))
-                || !(status.equals(String.valueOf(RelationshipStatus.NOT_FRIENDS))))) {
-            throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user or request already accepted");
+                && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo))) {
+            if (!(userDAO.getStatusRelationship(userIdFrom, userIdTo).equals(String.valueOf(RelationshipStatus.REQUEST_SENDED))))
+                throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user or request already accepted");
         } else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
-                && (String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo))
-                && ((userDAO.getStatusRelationship(userIdFrom, userIdTo).equals(String.valueOf(RelationshipStatus.NOT_FRIENDS)))))
-            throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user");
-
+                && (String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo))) {
+            if (((userDAO.getStatusRelationship(userIdFrom, userIdTo).equals(String.valueOf(RelationshipStatus.NOT_FRIENDS)))))
+                throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user");
+        }
         userDAO.updateRelationship(userIdFrom, userIdTo, status);
     }
 

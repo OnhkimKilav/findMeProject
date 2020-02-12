@@ -116,4 +116,11 @@ public class UserDAO implements DAO<User> {
         query.executeUpdate();
         return String.valueOf(query.getSingleResult());
     }
+
+    public Integer getExistenceRelationship(String userIdFrom, String userIdTo){
+        Query query = entityManager.createNativeQuery("SELECT * FROM RELATIONSHIP WHERE USER_ONE_ID = ? and USER_TWO_ID = ?")
+                .setParameter(1, userIdFrom)
+                .setParameter(2, userIdTo);
+        return query.executeUpdate();
+    }
 }
