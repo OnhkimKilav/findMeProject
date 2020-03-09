@@ -4,6 +4,7 @@ import com.findme.dao.userDAO.IUserDAORequestFriends;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.Validate;
 import com.findme.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,11 @@ import java.util.ArrayList;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceRequestFriendsImpl implements IUserServiceRequestFriends {
     private IUserDAORequestFriends userDAORequestFriends;
+
+    @Autowired
+    public UserServiceRequestFriendsImpl(IUserDAORequestFriends userDAORequestFriends) {
+        this.userDAORequestFriends = userDAORequestFriends;
+    }
 
     @Override
     public ArrayList<User> getIncomeRequests(HttpSession session, String userId) {
