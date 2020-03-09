@@ -1,8 +1,7 @@
 package com.findme.dao;
 
 
-public interface DAO<T> {
-
+public interface ICRUDDAO<T> {
     T save(T t);
 
     T findById(Long id);
