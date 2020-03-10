@@ -13,7 +13,6 @@ import java.util.Date;
 @org.springframework.stereotype.Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceCRADImpl implements IServiceCRAD<User> {
-
     private ICRUDDAO<User> icruddao;
     private IUserDAOGetUser userDAOGetUser;
 

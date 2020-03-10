@@ -1,6 +1,7 @@
 package com.findme.controller.userController;
 
 import com.findme.exception.BadRequestException;
+import com.findme.exception.Validate;
 import com.findme.service.userService.IUserServiceRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ public class UserControllerRelationshipImpl implements IUserControllerRelationsh
     public ResponseEntity<String> addRelationship(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         try {
+            Validate.checkLogIn(session);
             serviceRelationship.addRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"));
         } catch (BadRequestException bre) {
             return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
@@ -40,6 +42,7 @@ public class UserControllerRelationshipImpl implements IUserControllerRelationsh
     public ResponseEntity<String> updateRelationship(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         try {
+            Validate.checkLogIn(session);
             serviceRelationship.updateRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"), request.getParameter("status"));
         } catch (BadRequestException bre) {
             return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);

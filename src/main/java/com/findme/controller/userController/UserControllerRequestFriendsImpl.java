@@ -1,6 +1,7 @@
 package com.findme.controller.userController;
 
 import com.findme.exception.BadRequestException;
+import com.findme.exception.Validate;
 import com.findme.model.User;
 import com.findme.service.IServiceCRAD;
 import com.findme.service.userService.IUserServiceRequestFriends;
@@ -32,6 +33,7 @@ public class UserControllerRequestFriendsImpl implements IUserControllerRequestF
         HttpSession session = request.getSession(false);
         ArrayList<User> users;
         try {
+            Validate.checkLogIn(session);
             users = userServiceRequestFriends.getOutcomeRequests(session, request.getParameter("userId"));
         } catch (BadRequestException bre) {
             model.addAttribute("exception", bre.getMessage());
@@ -51,6 +53,7 @@ public class UserControllerRequestFriendsImpl implements IUserControllerRequestF
         HttpSession session = request.getSession(false);
         ArrayList<User> users;
         try {
+            Validate.checkLogIn(session);
             users = userServiceRequestFriends.getIncomeRequests(session, request.getParameter("userId"));
         } catch (BadRequestException bre) {
             model.addAttribute("exception", bre.getMessage());

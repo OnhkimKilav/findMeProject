@@ -2,7 +2,6 @@ package com.findme.service.userService;
 
 import com.findme.dao.userDAO.IUserDAORequestFriends;
 import com.findme.exception.BadRequestException;
-import com.findme.exception.Validate;
 import com.findme.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +21,6 @@ public class UserServiceRequestFriendsImpl implements IUserServiceRequestFriends
 
     @Override
     public ArrayList<User> getIncomeRequests(HttpSession session, String userId) {
-        Validate.checkLogIn(session);
         if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userId)))
             throw new BadRequestException("You can't use this function. You need log in");
         return userDAORequestFriends.getIncomeRequests(userId);
@@ -30,7 +28,6 @@ public class UserServiceRequestFriendsImpl implements IUserServiceRequestFriends
 
     @Override
     public ArrayList<User> getOutcomeRequests(HttpSession session, String userId) {
-        Validate.checkLogIn(session);
         if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userId)))
             throw new BadRequestException("You can't use this function. You need log in");
         return userDAORequestFriends.getOutcomeRequests(userId);

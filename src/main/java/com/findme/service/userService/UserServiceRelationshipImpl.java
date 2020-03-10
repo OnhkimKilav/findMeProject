@@ -2,9 +2,7 @@ package com.findme.service.userService;
 
 import com.findme.RelationshipStatus;
 import com.findme.dao.userDAO.IUserDAORelationship;
-import com.findme.dao.userDAO.UserDAOCRUDImpl;
 import com.findme.exception.BadRequestException;
-import com.findme.exception.Validate;
 import com.findme.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +23,6 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
 
     @Override
     public void addRelationship(HttpSession session, String userIdFrom, String userIdTo) {
-        Validate.checkLogIn(session);
         if (userIdFrom.equals(userIdTo))
             throw new BadRequestException("You cannot add yourself as a friend");
         else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom)))
@@ -41,11 +38,8 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
 
     @Override
     public void updateRelationship(HttpSession session, String userIdFrom, String userIdTo, String status) {
-        //Не залогинен
         //Ты отпровитель но ты не имеешь статуса отвленного запроса
         //Ты получатель но ты не имеешь статуса полученного запроса
-
-        Validate.checkLogIn(session);
 
         if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
                 && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo)))
