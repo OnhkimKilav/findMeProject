@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -41,14 +42,10 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
                 .setParameter(1, userIdFrom)
                 .setParameter(2, userIdTo);
         query.executeUpdate();
-        return String.valueOf(query.getSingleResult());
-    }
-
-    @Override
-    public Integer getExistenceRelationship(String userIdFrom, String userIdTo){
-        Query query = entityManager.createNativeQuery("SELECT * FROM RELATIONSHIP WHERE USER_ONE_ID = ? and USER_TWO_ID = ?")
-                .setParameter(1, userIdFrom)
-                .setParameter(2, userIdTo);
-        return query.executeUpdate();
+        try {
+            return String.valueOf(query.getSingleResult());
+        }catch (NoResultException e){
+            return null;
+        }
     }
 }

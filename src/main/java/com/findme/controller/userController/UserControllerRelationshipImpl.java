@@ -22,6 +22,7 @@ public class UserControllerRelationshipImpl implements IUserControllerRelationsh
         this.serviceRelationship = serviceRelationship;
     }
 
+    //http://localhost:8080/addRelationship?userIdFrom=161&userIdTo=141
     @Override
     @RequestMapping(path = "/addRelationship", method = RequestMethod.GET)
     public ResponseEntity<String> addRelationship(HttpServletRequest request) {
