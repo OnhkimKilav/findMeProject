@@ -8,4 +8,6 @@ public interface IUserControllerRelationship {
     ResponseEntity<String> addRelationship(HttpServletRequest request);
 
     ResponseEntity<String> updateRelationship(HttpServletRequest request);
+
+    ResponseEntity<String> deleteRelationship(HttpServletRequest request);
 }
