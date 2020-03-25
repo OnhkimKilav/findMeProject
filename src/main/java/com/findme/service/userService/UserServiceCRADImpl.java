@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import java.util.Date;
+import java.util.logging.Logger;
 
 @org.springframework.stereotype.Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceCRADImpl implements IServiceCRAD<User> {
+    private static Logger logger = Logger.getLogger(UserServiceCRADImpl.class.getName());
     private ICRUDDAO<User> icruddao;
     private IUserDAOGetUser userDAOGetUser;
 
@@ -26,7 +28,7 @@ public class UserServiceCRADImpl implements IServiceCRAD<User> {
     public User save(User user) throws RuntimeException {
         if (userDAOGetUser.userByPhone(user.getPhone()) != 0)
             throw new BadRequestException("This phone is already use");
-        if (userDAOGetUser.userByPhone(user.getEmail()) != 0)
+        if (userDAOGetUser.userByEmail(user.getEmail()) != 0)
             throw new BadRequestException("This email is already use");
         if (user.getDateRegistered() == null)
             user.setDateRegistered(new Date());
