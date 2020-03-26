@@ -4,6 +4,7 @@ import com.findme.RelationshipStatus;
 import com.findme.dao.userDAO.IUserDAORelationship;
 import com.findme.exception.BadRequestException;
 import com.findme.model.User;
+import com.findme.service.userService.CheckDeleteRelationship.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 @org.springframework.stereotype.Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceRelationshipImpl implements IUserServiceRelationship {
-
     private IUserDAORelationship userDAORelationship;
 
     @Autowired
@@ -72,4 +72,24 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
         }
         userDAORelationship.updateRelationship(userIdFrom, userIdTo, status);
     }
+
+    @Override
+    public boolean deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
+        UserDeleteRelationshipCheck deleteRelationshipCheck = new RelationshipTime();
+        deleteRelationshipCheck.linkWith(new MaxCountFriends()).linkWith(new MaxCountOutgoingRequests());
+
+        if (deleteRelationshipCheck.deleteRelationship(session, userIdFrom, userIdTo)) {
+            System.out.println("Authorization have been successful!");
+
+            // Здесь должен быть какой-то полезный код, работающий для
+            // авторизированных пользователей.
+
+            return true;
+        }
+        return false;
+
+
+    }
+
+
 }
