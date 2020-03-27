@@ -73,20 +73,27 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
         userDAORelationship.updateRelationship(userIdFrom, userIdTo, status);
     }
 
+    /**
+     * Method implements a relationship deleting.
+     * It's using  patterns chain of responsibility.
+     *
+     * @param session
+     * @param userIdFrom The variable means id user who sended request
+     * @param userIdTo   The variable means if user who recipiented request
+     * @return
+     */
+
     @Override
-    public boolean deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
-        UserDeleteRelationshipCheck deleteRelationshipCheck = new RelationshipTime();
-        deleteRelationshipCheck.linkWith(new MaxCountFriends()).linkWith(new MaxCountOutgoingRequests());
+    public void deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
+        /*UserDeleteRelationshipCheck deleteRelationshipCheck = new RelationshipTime();
+        //deleteRelationshipCheck.linkWith(new MaxCountFriends()).linkWith(new MaxCountOutgoingRequests());*/
+        IUserDeleteRelationshipCheck relationshipTime = new RelationshipTime();
+        IUserDeleteRelationshipCheck maxCountFriends = new MaxCountFriends();
+        IUserDeleteRelationshipCheck maxCountOutgoingRequests = new MaxCountOutgoingRequests();
+        relationshipTime.setNext(maxCountFriends);
+        maxCountFriends.setNext(maxCountOutgoingRequests);
 
-        if (deleteRelationshipCheck.deleteRelationship(session, userIdFrom, userIdTo)) {
-            System.out.println("Authorization have been successful!");
-
-            // Здесь должен быть какой-то полезный код, работающий для
-            // авторизированных пользователей.
-
-            return true;
-        }
-        return false;
+        relationshipTime.deleteRelationship(session, userIdFrom, userIdTo);
 
 
     }

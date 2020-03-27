@@ -7,5 +7,5 @@ public interface IUserServiceRelationship {
 
     void updateRelationship(HttpSession session, String userIdFrom, String userIdTo, String status);
 
-    boolean deleteRelationship(HttpSession session, String userIdFrom, String userIdTo);
+    void deleteRelationship(HttpSession session, String userIdFrom, String userIdTo);
 }

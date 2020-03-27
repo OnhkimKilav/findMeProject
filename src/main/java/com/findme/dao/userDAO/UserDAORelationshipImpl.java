@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Repository
 @Transactional
@@ -20,10 +21,11 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
 
     @Override
     public void addRelationship(String userIdFrom, String userIdTo) {
-        Query query = entityManager.createNativeQuery("INSERT INTO RELATIONSHIP VALUES(?, ?, ?)")
+        Query query = entityManager.createNativeQuery("INSERT INTO RELATIONSHIP VALUES(?, ?, ?, ?)")
                 .setParameter(1, userIdFrom)
                 .setParameter(2, userIdTo)
-                .setParameter(3, "REQUEST_SENDED");
+                .setParameter(3, "REQUEST_SENDED")
+                .setParameter(4, new Date());
         query.executeUpdate();
     }
 
@@ -34,6 +36,11 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
                 .setParameter(2, userIdFrom)
                 .setParameter(3, userIdTo);
         query.executeUpdate();
+    }
+
+    @Override
+    public void deleteRelationship(String userIdFrom, String userIdTo) {
+
     }
 
     @Override
@@ -48,4 +55,6 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
             return null;
         }
     }
+
+
 }
