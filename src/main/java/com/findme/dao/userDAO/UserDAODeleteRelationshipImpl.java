@@ -1,18 +1,15 @@
 package com.findme.dao.userDAO;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.Date;
 
 @Repository
-public class UserDAODeleteRelationshipCheckImpl implements IUserDAODeleteRelationshipCheck {
+public class UserDAODeleteRelationshipImpl implements IUserDAODeleteRelationship {
     @PersistenceContext
     private EntityManager entityManager;
 

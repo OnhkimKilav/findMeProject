@@ -2,10 +2,6 @@ package com.findme.controller.userController;
 
 import com.findme.exception.BadRequestException;
 import com.findme.exception.Validate;
-import com.findme.service.userService.CheckDeleteRelationship.MaxCountFriends;
-import com.findme.service.userService.CheckDeleteRelationship.MaxCountOutgoingRequests;
-import com.findme.service.userService.CheckDeleteRelationship.RelationshipTime;
-import com.findme.service.userService.CheckDeleteRelationship.UserDeleteRelationshipCheck;
 import com.findme.service.userService.IUserServiceRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

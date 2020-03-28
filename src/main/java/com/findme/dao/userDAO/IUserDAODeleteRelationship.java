@@ -2,7 +2,7 @@ package com.findme.dao.userDAO;
 
 import java.util.Date;
 
-public interface IUserDAODeleteRelationshipCheck {
+public interface IUserDAODeleteRelationship {
     Date relationshipTime(String userIdFrom, String userIdTo);
 
     int maxCountOutgoingRequest(String userIdFrom, String userIdTo);

@@ -4,14 +4,18 @@ import com.findme.RelationshipStatus;
 import com.findme.dao.userDAO.IUserDAORelationship;
 import com.findme.exception.BadRequestException;
 import com.findme.model.User;
-import com.findme.service.userService.CheckDeleteRelationship.*;
+import com.findme.service.userService.CheckDeleteRelationship.IDeleteRelationship;
+import com.findme.service.userService.CheckDeleteRelationship.MaxCountFriends;
+import com.findme.service.userService.CheckDeleteRelationship.MaxCountOutgoingRequests;
+import com.findme.service.userService.CheckDeleteRelationship.RelationshipTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
-@org.springframework.stereotype.Service
+@Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceRelationshipImpl implements IUserServiceRelationship {
     private IUserDAORelationship userDAORelationship;
@@ -87,11 +91,13 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
     public void deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
         /*UserDeleteRelationshipCheck deleteRelationshipCheck = new RelationshipTime();
         //deleteRelationshipCheck.linkWith(new MaxCountFriends()).linkWith(new MaxCountOutgoingRequests());*/
-        IUserDeleteRelationshipCheck relationshipTime = new RelationshipTime();
-        IUserDeleteRelationshipCheck maxCountFriends = new MaxCountFriends();
-        IUserDeleteRelationshipCheck maxCountOutgoingRequests = new MaxCountOutgoingRequests();
+        IDeleteRelationship relationshipTime = new RelationshipTime();
+        IDeleteRelationship maxCountFriends = new MaxCountFriends();
+        IDeleteRelationship maxCountOutgoingRequests = new MaxCountOutgoingRequests();
         relationshipTime.setNext(maxCountFriends);
         maxCountFriends.setNext(maxCountOutgoingRequests);
+
+        //deleteChain.introduceUser(new User('Julie Marot', 'F'));
 
         relationshipTime.deleteRelationship(session, userIdFrom, userIdTo);
 
