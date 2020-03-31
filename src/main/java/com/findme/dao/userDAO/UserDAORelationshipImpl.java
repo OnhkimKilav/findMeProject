@@ -40,7 +40,11 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
 
     @Override
     public void deleteRelationship(String userIdFrom, String userIdTo) {
-
+        Query query = entityManager.createNativeQuery("UPDATE RELATIONSHIP SET STATUS = ? WHERE USER_ONE_ID = ? AND USER_TWO_ID = ?")
+                .setParameter(1, "NOT_FRIENDS")
+                .setParameter(2, userIdFrom)
+                .setParameter(3, userIdTo);
+        query.executeUpdate();
     }
 
     @Override

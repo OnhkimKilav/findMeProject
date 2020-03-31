@@ -58,7 +58,14 @@ public class UserControllerRelationshipImpl implements IUserControllerRelationsh
     @RequestMapping(path = "/deleteRelationship", method = RequestMethod.GET)
     public ResponseEntity<String> deleteRelationship(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        serviceRelationship.deleteRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"));
+        try {
+            Validate.checkLogIn(session);
+            serviceRelationship.deleteRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"));
+        } catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<String>("Ok", HttpStatus.OK);
     }
 }

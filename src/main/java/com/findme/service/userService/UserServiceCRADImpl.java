@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 @org.springframework.stereotype.Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceCRADImpl implements IServiceCRAD<User> {
-    private static Logger logger = Logger.getLogger(UserServiceCRADImpl.class.getName());
     private ICRUDDAO<User> icruddao;
     private IUserDAOGetUser userDAOGetUser;
 
