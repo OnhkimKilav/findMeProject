@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpSession;
 
 @Service
@@ -80,7 +81,6 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
      *
      * @param userIdFrom The variable means id user who sended request
      * @param userIdTo   The variable means if user who recipiented request
-     * @return
      */
 
     @Autowired
@@ -95,11 +95,14 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
     @Qualifier("maxCountOutgoingRequests")
     private IDeleteRelationship maxCountOutgoingRequests;
 
+    @Autowired
+    @Qualifier("othersChecks")
+    private IDeleteRelationship othersChecks;
 
     @Override
     public void deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
-        relationshipTime.setNext(maxCountFriends).setNext(maxCountOutgoingRequests);
-        relationshipTime.deleteRelationship(userIdFrom, userIdTo);
+        othersChecks.setNext(relationshipTime).setNext(maxCountFriends).setNext(maxCountOutgoingRequests);
+        othersChecks.delete(session, userIdFrom, userIdTo);
 
         userDAORelationship.deleteRelationship(userIdFrom, userIdTo);
     }

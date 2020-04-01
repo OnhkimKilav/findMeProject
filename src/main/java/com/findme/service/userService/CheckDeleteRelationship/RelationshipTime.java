@@ -5,6 +5,7 @@ import com.findme.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,39 +27,31 @@ public class RelationshipTime implements IDeleteRelationship {
     }
 
     @Override
-    public void deleteRelationship(String userIdFrom, String userIdTo) {
-        System.out.println("Method deleteRalationship from class RelationshipTime is done");
-        long countingDays = countingDays(iUserDAODeleteRelationship.relationshipTime(userIdFrom, userIdTo));
-
-        if (userIdFrom == null && userIdTo == null) {
-            throw new NullPointerException("You must indicates userIdFrom or userIdTo");
-        } else if (countingDays < 3) {
+    public void delete(HttpSession session, String userIdFrom, String userIdTo) {
+        if (countingDays(iUserDAODeleteRelationship.relationshipTime(userIdFrom, userIdTo)) < 3)
             throw new BadRequestException("You can't delete user: " + userIdTo + " because 3 days have not passed");
-        } else {
-            System.out.println("Next check");
-            checkNull(userIdFrom, userIdTo);
-        }
+        else checkNull(session, userIdFrom, userIdTo);
     }
 
-    private void checkNull(String userIdFrom, String userIdTo){
-        if(next == null)
+    private void checkNull(HttpSession session, String userIdFrom, String userIdTo) {
+        if (next == null)
             return;
-        next.deleteRelationship(userIdFrom, userIdTo);
+        next.delete(session, userIdFrom, userIdTo);
     }
 
     private long countingDays(Date dateBefore) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        String date3 = format.format(dateBefore);
-        String date4 = format.format(new Date());
-        Date date1 = null;
-        Date date2 = null;
+        String date1 = format.format(dateBefore);
+        String date2 = format.format(new Date());
+        Date date3 = null;
+        Date date4 = null;
         try {
-            date1 = format.parse(date4);
-            date2 = format.parse(date3);
+            date3 = format.parse(date1);
+            date4 = format.parse(date2);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long difference = date1.getTime() - date2.getTime();
+        long difference = date4.getTime() - date3.getTime();
         long days = difference / (24 * 60 * 60 * 1000);
         return days;
     }

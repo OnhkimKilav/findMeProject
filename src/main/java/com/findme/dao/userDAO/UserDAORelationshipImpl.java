@@ -56,7 +56,7 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
         try {
             return String.valueOf(query.getSingleResult());
         }catch (NoResultException e){
-            return null;
+            throw new NoResultException("There is no such relationship.");
         }
     }
 

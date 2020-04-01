@@ -1,7 +1,9 @@
 package com.findme.service.userService.CheckDeleteRelationship;
 
+import javax.servlet.http.HttpSession;
+
 public interface IDeleteRelationship {
     IDeleteRelationship setNext(IDeleteRelationship next);
 
-    void deleteRelationship(String userIdFrom, String userIdTo);
+    void delete(HttpSession session, String userIdFrom, String userIdTo);
 }

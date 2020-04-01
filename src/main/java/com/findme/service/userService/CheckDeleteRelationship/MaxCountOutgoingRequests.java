@@ -5,6 +5,8 @@ import com.findme.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
+
 @Component(value = "maxCountOutgoingRequests")
 public class MaxCountOutgoingRequests implements IDeleteRelationship {
     private IDeleteRelationship next;
@@ -22,20 +24,15 @@ public class MaxCountOutgoingRequests implements IDeleteRelationship {
     }
 
     @Override
-    public void deleteRelationship(String userIdFrom, String userIdTo) {
-        System.out.println("Method deleteRalationship from class MaxCountFriends is done");
-
-        if (iUserDAODeleteRelationship.maxCountOutgoingRequest(userIdFrom, userIdTo) > 10) {
+    public void delete(HttpSession session, String userIdFrom, String userIdTo) {
+        if (iUserDAODeleteRelationship.maxCountOutgoingRequest(userIdFrom, userIdTo) > 10)
             throw new BadRequestException("Sorry. You have more than 100 friends.");
-        }else {
-            System.out.println("Next check");
-            checkNull(userIdTo, userIdFrom);
-        }
+        else checkNull(session, userIdTo, userIdFrom);
     }
 
-    private void checkNull(String userIdFrom, String userIdTo){
-        if(next == null)
+    private void checkNull(HttpSession session, String userIdFrom, String userIdTo) {
+        if (next == null)
             return;
-        next.deleteRelationship(userIdFrom, userIdTo);
+        next.delete(session, userIdFrom, userIdTo);
     }
 }
