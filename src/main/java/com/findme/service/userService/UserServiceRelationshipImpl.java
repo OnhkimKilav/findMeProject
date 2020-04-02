@@ -4,16 +4,18 @@ import com.findme.RelationshipStatus;
 import com.findme.dao.userDAO.IUserDAORelationship;
 import com.findme.exception.BadRequestException;
 import com.findme.model.User;
+import com.findme.service.userService.CheckDeleteRelationship.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
-@org.springframework.stereotype.Service
+@Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserServiceRelationshipImpl implements IUserServiceRelationship {
-
     private IUserDAORelationship userDAORelationship;
 
     @Autowired
@@ -72,4 +74,38 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
         }
         userDAORelationship.updateRelationship(userIdFrom, userIdTo, status);
     }
+
+    /**
+     * Method implements a relationship deleting.
+     * It's using  patterns chain of responsibility.
+     *
+     * @param userIdFrom The variable means id user who sended request
+     * @param userIdTo   The variable means if user who recipiented request
+     */
+
+    @Autowired
+    @Qualifier("relationshipTime")
+    private IDeleteRelationship relationshipTime;
+
+    @Autowired
+    @Qualifier("maxCountFriends")
+    private IDeleteRelationship maxCountFriends;
+
+    @Autowired
+    @Qualifier("maxCountOutgoingRequests")
+    private IDeleteRelationship maxCountOutgoingRequests;
+
+    @Autowired
+    @Qualifier("othersChecks")
+    private IDeleteRelationship othersChecks;
+
+    @Override
+    public void deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
+        othersChecks.setNext(relationshipTime).setNext(maxCountFriends).setNext(maxCountOutgoingRequests);
+        othersChecks.delete(session, userIdFrom, userIdTo);
+
+        userDAORelationship.deleteRelationship(userIdFrom, userIdTo);
+    }
+
+
 }

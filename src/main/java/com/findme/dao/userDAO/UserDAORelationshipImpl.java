@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Repository
 @Transactional
@@ -20,10 +21,11 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
 
     @Override
     public void addRelationship(String userIdFrom, String userIdTo) {
-        Query query = entityManager.createNativeQuery("INSERT INTO RELATIONSHIP VALUES(?, ?, ?)")
+        Query query = entityManager.createNativeQuery("INSERT INTO RELATIONSHIP VALUES(?, ?, ?, ?)")
                 .setParameter(1, userIdFrom)
                 .setParameter(2, userIdTo)
-                .setParameter(3, "REQUEST_SENDED");
+                .setParameter(3, "REQUEST_SENDED")
+                .setParameter(4, new Date());
         query.executeUpdate();
     }
 
@@ -31,6 +33,15 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
     public void updateRelationship(String userIdFrom, String userIdTo, String status) {
         Query query = entityManager.createNativeQuery("UPDATE RELATIONSHIP SET STATUS = ? WHERE USER_ONE_ID = ? AND USER_TWO_ID = ?")
                 .setParameter(1, status)
+                .setParameter(2, userIdFrom)
+                .setParameter(3, userIdTo);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteRelationship(String userIdFrom, String userIdTo) {
+        Query query = entityManager.createNativeQuery("UPDATE RELATIONSHIP SET STATUS = ? WHERE USER_ONE_ID = ? AND USER_TWO_ID = ?")
+                .setParameter(1, "NOT_FRIENDS")
                 .setParameter(2, userIdFrom)
                 .setParameter(3, userIdTo);
         query.executeUpdate();
@@ -45,7 +56,9 @@ public class UserDAORelationshipImpl implements IUserDAORelationship {
         try {
             return String.valueOf(query.getSingleResult());
         }catch (NoResultException e){
-            return null;
+            throw new NoResultException("There is no such relationship.");
         }
     }
+
+
 }

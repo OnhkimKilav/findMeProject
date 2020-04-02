@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -45,6 +46,21 @@ public class UserControllerRelationshipImpl implements IUserControllerRelationsh
         try {
             Validate.checkLogIn(session);
             serviceRelationship.updateRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"), request.getParameter("status"));
+        } catch (BadRequestException bre) {
+            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>("Ok", HttpStatus.OK);
+    }
+
+    @Override
+    @RequestMapping(path = "/deleteRelationship", method = RequestMethod.GET)
+    public ResponseEntity<String> deleteRelationship(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        try {
+            Validate.checkLogIn(session);
+            serviceRelationship.deleteRelationship(session, request.getParameter("userIdFrom"), request.getParameter("userIdTo"));
         } catch (BadRequestException bre) {
             return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {

@@ -5,5 +5,7 @@ public interface IUserDAORelationship {
 
     void updateRelationship(String userIdFrom, String userIdTo, String status);
 
+    void deleteRelationship(String userIdFrom, String userIdTo);
+
     String getStatusRelationship(String userIdFrom, String userIdTo);
 }
