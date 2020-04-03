@@ -1,6 +1,7 @@
 package com.findme.service.userService;
 
 import com.findme.RelationshipStatus;
+import com.findme.check.checkUser;
 import com.findme.dao.userDAO.IUserDAORelationship;
 import com.findme.exception.BadRequestException;
 import com.findme.model.User;
@@ -46,42 +47,44 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
 
     }
 
-    //Ты отпровитель но ты не имеешь статуса отвленного запроса
-    //Ты получатель но ты не имеешь статуса полученного запроса
-
-    //In order to exception was returned when user was log in behind sender
-    //1. I'm sender
-    //2. I'm not recipient
-    //3. Status relationship in the DB should by REQUEST_SENDED
+    /**
+     *
+     *
+     * @param session
+     * @param userIdFrom
+     * @param userIdTo
+     * @param status
+     */
 
     @Override
     public void updateRelationship(HttpSession session, String userIdFrom, String userIdTo, String status) {
         String statusRelationship = userDAORelationship.getStatusRelationship(userIdFrom, userIdTo);
 
-        if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
-                && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo)))
-            throw new BadRequestException("You can't use this function. You need log in");
-        else if (statusRelationship == null) {
-            throw new BadRequestException("You cannot update relationship which does not exist");
-        } else if ((String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
+        checkUser.bothUserIsSessionUser(session, userIdFrom, userIdTo);
+        checkUser.nullStatusRelationship(statusRelationship);
+
+        /**
+         * This check need for request processing from sender to recipient for update relationship.
+         * In the first checking we check so that user will be sender and not will be recipient.
+         * And in the second check we check status relationship, it should be equal status " REQUEST_SENDED "
+         */
+        if ((String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
                 && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo))) {
             if (!(statusRelationship.equals(String.valueOf(RelationshipStatus.REQUEST_SENDED))))
                 throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user or request already accepted");
-        } else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
+        }
+        /**
+         * This check need for request processing from recipient  to sender for update relationship.
+         * In the first checking we check so that user will be recipient  and not will be sender.
+         * And in the second check we check status relationship, it should be not equal status " NOT_FRIENDS "
+         */
+        else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom))
                 && (String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdTo))) {
             if (((statusRelationship.equals(String.valueOf(RelationshipStatus.NOT_FRIENDS)))))
                 throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user");
         }
         userDAORelationship.updateRelationship(userIdFrom, userIdTo, status);
     }
-
-    /**
-     * Method implements a relationship deleting.
-     * It's using  patterns chain of responsibility.
-     *
-     * @param userIdFrom The variable means id user who sended request
-     * @param userIdTo   The variable means if user who recipiented request
-     */
 
     @Autowired
     @Qualifier("relationshipTime")
@@ -99,6 +102,13 @@ public class UserServiceRelationshipImpl implements IUserServiceRelationship {
     @Qualifier("othersChecks")
     private IDeleteRelationship othersChecks;
 
+    /**
+     * Method implements a relationship deleting.
+     * It's using  patterns chain of responsibility.
+     *
+     * @param userIdFrom The variable means id user who sended request
+     * @param userIdTo   The variable means if user who recipiented request
+     */
     @Override
     public void deleteRelationship(HttpSession session, String userIdFrom, String userIdTo) {
         othersChecks.setNext(relationshipTime).setNext(maxCountFriends).setNext(maxCountOutgoingRequests);
