@@ -29,7 +29,7 @@ public class checkUser {
      * user identifiers.
      * If both user id not logging in in the session then returned exception "BadRequestException" with message.
      *
-     * @param session    - session which run at the moment
+     * @param session    - user who at now logged in at the session
      * @param userIdFrom - ID of the user who sends
      * @param userIdTo   - ID of the user who receives
      */
