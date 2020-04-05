@@ -3,7 +3,7 @@ package com.findme.controller.userController;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.Validate;
 import com.findme.model.User;
-import com.findme.service.IServiceCRAD;
+import com.findme.service.IServiceCRUD;
 import com.findme.service.userService.IUserServiceRequestFriends;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +17,11 @@ import java.util.ArrayList;
 @Controller
 public class UserControllerRequestFriendsImpl implements IUserControllerRequestFriends {
 
-    private IServiceCRAD<User> serviceCRAD;
+    private IServiceCRUD<User> serviceCRAD;
     private IUserServiceRequestFriends userServiceRequestFriends;
 
     @Autowired
-    public UserControllerRequestFriendsImpl(IServiceCRAD<User> serviceCRAD, IUserServiceRequestFriends userServiceRequestFriends) {
+    public UserControllerRequestFriendsImpl(IServiceCRUD<User> serviceCRAD, IUserServiceRequestFriends userServiceRequestFriends) {
         this.serviceCRAD = serviceCRAD;
         this.userServiceRequestFriends = userServiceRequestFriends;
     }

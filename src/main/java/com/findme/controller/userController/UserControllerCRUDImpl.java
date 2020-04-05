@@ -1,8 +1,8 @@
 package com.findme.controller.userController;
 
-import com.findme.controller.IControllerCRAD;
+import com.findme.controller.IControllerCRUD;
 import com.findme.model.User;
-import com.findme.service.IServiceCRAD;
+import com.findme.service.IServiceCRUD;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +15,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 @Controller
-public class UserControllerCRADImpl implements IControllerCRAD{
-    private IServiceCRAD<User> service;
+public class UserControllerCRUDImpl implements IControllerCRUD {
+    private IServiceCRUD<User> service;
 
     @Autowired
-    public UserControllerCRADImpl(IServiceCRAD<User> service) {
+    public UserControllerCRUDImpl(IServiceCRUD<User> service) {
         this.service = service;
     }
 

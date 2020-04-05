@@ -1,7 +1,7 @@
 package com.findme.controller.userController;
 
 import com.findme.model.User;
-import com.findme.service.IServiceCRAD;
+import com.findme.service.IServiceCRUD;
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class UserControllerProfileImpl implements IUserControllerProfile {
 
-    private IServiceCRAD<User> serviceCRAD;
+    private IServiceCRUD<User> serviceCRAD;
 
     @Autowired
-    public UserControllerProfileImpl(IServiceCRAD<User> serviceCRAD) {
+    public UserControllerProfileImpl(IServiceCRUD<User> serviceCRAD) {
         this.serviceCRAD = serviceCRAD;
     }
 

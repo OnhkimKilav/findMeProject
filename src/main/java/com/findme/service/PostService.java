@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 
 @org.springframework.stereotype.Service
 @Scope( proxyMode = ScopedProxyMode.TARGET_CLASS )
-public class PostService implements IServiceCRAD<Post> {
+public class PostService implements IServiceCRUD<Post> {
     private PostDAO postDAO;
 
     @Autowired

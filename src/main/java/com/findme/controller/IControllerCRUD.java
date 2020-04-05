@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface IControllerCRAD {
+public interface IControllerCRUD {
     ResponseEntity<String> save(HttpServletRequest req);
 
     ResponseEntity<String> findById(HttpServletRequest req);

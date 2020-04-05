@@ -1,7 +1,7 @@
 package com.findme.service;
 
 
-public interface IServiceCRAD<T> {
+public interface IServiceCRUD<T> {
     T save(T t) throws RuntimeException;
 
     T findById(Long id);

@@ -2,7 +2,7 @@ package com.findme.controller.userController;
 
 import com.findme.exception.BadRequestException;
 import com.findme.model.User;
-import com.findme.service.IServiceCRAD;
+import com.findme.service.IServiceCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class UserControllerRegistrationImpl implements IUserControllerRegistration {
 
-    private IServiceCRAD<User> serviceCRAD;
+    private IServiceCRUD<User> serviceCRAD;
 
     @Autowired
-    public UserControllerRegistrationImpl(IServiceCRAD<User> serviceCRAD) {
+    public UserControllerRegistrationImpl(IServiceCRUD<User> serviceCRAD) {
         this.serviceCRAD = serviceCRAD;
     }
 
