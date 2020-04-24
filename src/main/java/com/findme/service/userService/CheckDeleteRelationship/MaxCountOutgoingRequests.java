@@ -47,7 +47,7 @@ public class MaxCountOutgoingRequests implements IDeleteRelationship {
      */
     @Override
     public void delete(HttpSession session, String userIdFrom, String userIdTo) {
-        if (iUserDAODeleteRelationship.maxCountOutgoingRequest(userIdFrom, userIdTo) > 10)
+        if (iUserDAODeleteRelationship.maxCountOutgoingRequest(userIdFrom) > 10)
             throw new BadRequestException("Sorry. You have more than 10 outgoing requests in friends");
         else checkNull(session, userIdTo, userIdFrom);
     }
