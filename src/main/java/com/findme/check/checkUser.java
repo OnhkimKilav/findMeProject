@@ -6,6 +6,7 @@ import com.findme.model.User;
 import javax.servlet.http.HttpSession;
 
 public class checkUser {
+
     public static void userIsSessionUser(HttpSession session, String userIdFrom){
         if(!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userIdFrom)))
             throw new BadRequestException("To doing this function you must log in under this user.");
@@ -25,5 +26,9 @@ public class checkUser {
     public static void bothUsersNull(String userIdFrom, String userIdTo){
         if(userIdFrom.equals("null") || userIdTo.equals("null"))
             throw new NullPointerException("You pass a null value.");
+    }
+
+    public static void bothUsersAreFriends(String userIdFrom, String userIdTo){
+
     }
 }

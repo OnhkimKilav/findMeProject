@@ -24,11 +24,11 @@ public class Message {
     private Date dateRead;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="USER_FROM_ID", nullable=false,unique=true)
+    @JoinColumn(name = "USER_FROM_ID", nullable = false, unique = true)
     private User userFrom;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="USER_TO_ID", nullable=false,unique=true)
+    @JoinColumn(name = "USER_TO_ID", nullable = false, unique = true)
     private User userTo;
 
     public Long getId() {

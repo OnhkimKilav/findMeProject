@@ -2,6 +2,8 @@ package com.findme.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "POST")
@@ -12,21 +14,38 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
     private Long id;
 
-    @Column(name = "POST")
-    private String post;
+    @Column(name = "MESSAGE")
+    private String message;
 
     @Column(name = "DATE_POSTED")
     private Date datePosted;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="USER_POSTED_ID", nullable=false)
+    @Column(name = "LOCATION")
+    private String location;
+
+    @Column(name = "USERS_TAGGED")
+    @OneToMany(mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<User> usersTagged;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_POSTED_FK")
     private User userPosted;
-    //TODO
-    //levels permissions
 
-    //TODO
-    //comments
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_PAGE_POSTED_FK")
+    private User userPagePosted;
 
+    public Post() {
+    }
+
+    public Post(String message, Date datePosted, String location, Set<User> usersTagged, User userPosted, User userPagePosted) {
+        this.message = message;
+        this.datePosted = datePosted;
+        this.location = location;
+        this.usersTagged = usersTagged;
+        this.userPosted = userPosted;
+        this.userPagePosted = userPagePosted;
+    }
 
     public Long getId() {
         return id;
@@ -36,12 +55,12 @@ public class Post {
         this.id = id;
     }
 
-    public String getPost() {
-        return post;
+    public String getMessage() {
+        return message;
     }
 
-    public void setPost(String post) {
-        this.post = post;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Date getDatePosted() {
@@ -52,6 +71,22 @@ public class Post {
         this.datePosted = datePosted;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Set<User> getUsersTagged() {
+        return usersTagged;
+    }
+
+    public void setUsersTagged(Set<User> usersTagged) {
+        this.usersTagged = usersTagged;
+    }
+
     public User getUserPosted() {
         return userPosted;
     }
@@ -60,13 +95,44 @@ public class Post {
         this.userPosted = userPosted;
     }
 
+    public User getUserPagePosted() {
+        return userPagePosted;
+    }
+
+    public void setUserPagePosted(User userPagePosted) {
+        this.userPagePosted = userPagePosted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id) &&
+                Objects.equals(message, post.message) &&
+                Objects.equals(datePosted, post.datePosted) &&
+                Objects.equals(location, post.location) &&
+                Objects.equals(usersTagged, post.usersTagged) &&
+                Objects.equals(userPosted, post.userPosted) &&
+                Objects.equals(userPagePosted, post.userPagePosted);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, message, datePosted, location, usersTagged, userPosted, userPagePosted);
+    }
+
     @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +
-                ", post='" + post + '\'' +
+                ", message='" + message + '\'' +
                 ", datePosted=" + datePosted +
+                ", location='" + location + '\'' +
+                ", usersTagged=" + usersTagged +
                 ", userPosted=" + userPosted +
+                ", userPagePosted=" + userPagePosted +
                 '}';
     }
 }

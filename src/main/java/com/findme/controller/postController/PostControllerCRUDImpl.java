@@ -1,7 +1,8 @@
-package com.findme.controller;
+package com.findme.controller.postController;
 
+import com.findme.controller.IControllerCRAD;
 import com.findme.model.Post;
-import com.findme.service.PostService;
+import com.findme.service.IServiceCRAD;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,50 +16,54 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 @Controller
-public class PostController {
-    private PostService postService;
+public class PostControllerCRUDImpl implements IControllerCRAD{
+    private IServiceCRAD<Post> iServiceCRAD;
 
     @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
+    public PostControllerCRUDImpl(IServiceCRAD<Post> iServiceCRAD) {
+        this.iServiceCRAD = iServiceCRAD;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/savePost", produces = "text/plain")
-    public ResponseEntity<String> savePost(HttpServletRequest req) throws IOException {
+    @Override
+    @RequestMapping(value = "/savePost", method = RequestMethod.POST, produces = "text/plain")
+    public ResponseEntity<String> save(HttpServletRequest req) {
         Post post = null;
         try {
-            post = postService.save(readValuesPostman(req));
+            post = iServiceCRAD.save(readValuesPostman(req));
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), null, null);
+        }
+        return new ResponseEntity<String>("Ok : " + post.toString(), HttpStatus.CREATED);
+    }
+
+    @Override
+    @RequestMapping(value = "/findPost", method = RequestMethod.GET, produces = "text/plain")
+    public ResponseEntity<String> findById(HttpServletRequest req) {
+        Post post = null;
+        try {
+            post = iServiceCRAD.findById(Long.parseLong(req.getParameter("id")));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }
         return new ResponseEntity<String>("Ok : " + post.toString(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findPost", produces = "text/plain")
-    public ResponseEntity<String> findPost(HttpServletRequest req) throws IOException {
-        Post post = null;
+    @Override
+    @RequestMapping(value = "/deletePost", method = RequestMethod.DELETE, produces = "text/plain")
+    public ResponseEntity<String> delete(HttpServletRequest req) {
         try {
-            post = postService.findById(Long.parseLong(req.getParameter("id")));
-        } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), null, null);
-        }
-        return new ResponseEntity<String>("Ok : " + post.toString(), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/deletePost", produces = "text/plain")
-    public ResponseEntity<String> deletePost(HttpServletRequest req) {
-        try {
-            postService.delete(Long.parseLong(req.getParameter("id")));
+            iServiceCRAD.delete(Long.parseLong(req.getParameter("id")));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }
         return new ResponseEntity<String>("Ok", HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/updatePost", produces = "text/plain")
-    public ResponseEntity<String> updatePost(HttpServletRequest req) throws IOException {
+    @Override
+    @RequestMapping(value = "/updatePost", method = RequestMethod.PUT, produces = "text/plain")
+    public ResponseEntity<String> update(HttpServletRequest req) {
         try {
-            postService.update(readValuesPostman(req));
+            iServiceCRAD.update(readValuesPostman(req));
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), null, null);
         }

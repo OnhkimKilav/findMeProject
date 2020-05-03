@@ -1,5 +1,6 @@
-package com.findme.dao;
+package com.findme.dao.postDAO;
 
+import com.findme.dao.ICRUDDAO;
 import com.findme.model.Post;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -11,9 +12,8 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-@Scope( proxyMode = ScopedProxyMode.TARGET_CLASS )
-public class PostDAO implements ICRUDDAO<Post> {
-
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class PostDAOCRUDImpl implements ICRUDDAO<Post> {
     @PersistenceContext
     private EntityManager entityManager;
 

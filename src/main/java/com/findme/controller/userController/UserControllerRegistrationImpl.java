@@ -23,7 +23,7 @@ public class UserControllerRegistrationImpl implements IUserControllerRegistrati
     }
 
     @Override
-    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
+    @RequestMapping(path = "/register-user", method = RequestMethod.GET)
     public ResponseEntity<String> registerUser(@ModelAttribute User user) {
         try {
             serviceCRAD.save(user);

@@ -30,6 +30,7 @@
             <p th:text="${user.university}"></p>
         </div>
 
+
         <div>
             <ul th:each="user : ${usersIncome}" class="hr">
                 <li th:text="${user[0]}"></li>
@@ -56,6 +57,15 @@
     $.ajax({
         type: "GET",
         url: "/user/{userId}",
+        data: {},
+        error: function error(xhr) {
+            alert(xhr.responseText);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/post/{userId}",
         data: {},
         error: function error(xhr) {
             alert(xhr.responseText);
