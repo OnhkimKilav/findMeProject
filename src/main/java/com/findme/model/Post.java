@@ -24,15 +24,17 @@ public class Post {
     private String location;
 
     @Column(name = "USERS_TAGGED")
-    @OneToMany(mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="id", cascade = CascadeType.MERGE , fetch = FetchType.EAGER)
     private Set<User> usersTagged;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_POSTED_FK")
+    @OneToOne(cascade = CascadeType.MERGE  )
+    //@JoinColumn(name = "USER_POSTED_FK")
+    @PrimaryKeyJoinColumn
     private User userPosted;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_PAGE_POSTED_FK")
+    @OneToOne(cascade = CascadeType.MERGE  )
+    //@JoinColumn(name = "USER_PAGE_POSTED_FK")
+    @PrimaryKeyJoinColumn
     private User userPagePosted;
 
     public Post() {

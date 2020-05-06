@@ -27,8 +27,4 @@ public class checkUser {
         if(userIdFrom.equals("null") || userIdTo.equals("null"))
             throw new NullPointerException("You pass a null value.");
     }
-
-    public static void bothUsersAreFriends(String userIdFrom, String userIdTo){
-
-    }
 }
