@@ -23,7 +23,7 @@ public class UserControllerProfileImpl implements IUserControllerProfile {
     @Override
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
     public String profile(Model model, @PathVariable String userId) {
-        User user = (User) serviceCRAD.findById(Long.valueOf(userId));
+        User user = serviceCRAD.findById(Long.valueOf(userId));
         if (user == null) {
             model.addAttribute("exception", new ObjectNotFoundException("Object with this id " + userId + " not found"));
             return "profileException";

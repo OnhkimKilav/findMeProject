@@ -28,7 +28,6 @@ public class User {
     @Column(name = "PHONE")
     private String phone;
 
-    //TODO from existed data
     @Column(name = "COUNTRY")
     private String country;
 

@@ -25,6 +25,8 @@
     <button type="submit">Register</button>
 </form>
 
+<button onclick="document.location='create-post'">Create post</button>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </body>
@@ -59,7 +61,7 @@
             type: "POST",
             url: "/register-user",
             data: $('#registration-form').serialize(),
-            success: function success(data) {
+            success: function success() {
                 alert("Congratulations!'\n'You are registration");
             },
             error: function error(xhr) {

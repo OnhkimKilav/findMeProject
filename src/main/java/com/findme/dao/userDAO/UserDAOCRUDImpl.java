@@ -1,10 +1,12 @@
 package com.findme.dao.userDAO;
 
 import com.findme.dao.ICRUDDAO;
+import com.findme.exception.BadRequestException;
 import com.findme.model.User;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -25,7 +27,11 @@ public class UserDAOCRUDImpl implements ICRUDDAO<User> {
 
     @Override
     public User findById(Long id) {
-        return entityManager.find(User.class, id);
+        User user = entityManager.find(User.class, id);
+        if (user == null)
+            throw new BadRequestException("User with such id " + id + " not found");
+        else
+            return user;
     }
 
 

@@ -34,7 +34,7 @@ public class UserServiceCRADImpl implements IServiceCRAD<User> {
         if (user.getDateLastActive() == null)
             user.setDateLastActive(new Date());
 
-        return (User) icruddao.save(user);
+        return icruddao.save(user);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class UserServiceCRADImpl implements IServiceCRAD<User> {
 
     @Override
     public User findById(Long id) {
-        return (User) icruddao.findById(id);
+        return icruddao.findById(id);
     }
 
 }
