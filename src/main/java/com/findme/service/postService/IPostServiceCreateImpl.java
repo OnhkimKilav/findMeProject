@@ -39,12 +39,12 @@ public class IPostServiceCreateImpl implements IPostServiceCreate {
 
         checkUser.userIsSessionUser(session, String.valueOf(post.getUserPosted().getId()));
 
-        String status = userDAORelationship.getStatusRelationship(String.valueOf(post.getUserPosted().getId()),
-                String.valueOf(post.getUserPagePosted().getId()));
-
-        if (post.getUserPosted().equals(post.getUserPagePosted())) {
+        if (post.getUserPosted().getId().equals(post.getUserPagePosted().getId())) {
             postIServiceCRAD.save(post);
         } else {
+            String status = userDAORelationship.getStatusRelationship(String.valueOf(post.getUserPosted().getId()),
+                    String.valueOf(post.getUserPagePosted().getId()));
+
             if (status.equals(RelationshipStatus.FRIENDS.name()))
                 postIServiceCRAD.save(post);
             else throw new BadRequestException("You can't write this post");

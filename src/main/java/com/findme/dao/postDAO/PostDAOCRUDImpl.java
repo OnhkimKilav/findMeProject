@@ -22,11 +22,8 @@ public class PostDAOCRUDImpl implements ICRUDDAO<Post> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Logger logger;
-
     @Override
     public Post save(Post post) {
-        //logger.log(Level.INFO, "Creating sql query for inserting post to db");
         Query query = entityManager.createNativeQuery("INSERT INTO POST (POST_ID, MESSAGE, DATE_POSTED, LOCATION," +
                 "USERS_TAGGED, USER_POSTED, USER_PAGE_POSTED) VALUES (POST_SEQ.nextval, ?, ?, ?, ?, ?, ?)", Post.class)
                 .setParameter(1, post.getMessage())
