@@ -28,24 +28,6 @@ public class PostControllerCreateImpl implements IPostControllerCreate {
         this.iPostServiceCreate = iPostServiceCreate;
     }
 
-    //http://localhost:8080/createPost?message=%22Hello,%20I%27m%20Valik%22&usersTagged=2&userPosted=1&userPagePosted=4
-    /*@Override
-    @RequestMapping(path = "/createPost", method = RequestMethod.POST)
-    public ResponseEntity<String> createPost(@ModelAttribute Post post, HttpSession session, HttpServletRequest request) {
-        try {
-            *//*Post post = new Post(String.valueOf(request.getAttribute("message")), new Date(), String.valueOf(request.getAttribute("location")),
-                    request.getAttribute("usersTagged"),  request.getAttribute("usersTagged"), request.getAttribute("usersTagged"));*//*
-            iPostServiceCreate.createPost(session, post);
-        } catch (BadRequestException bre) {
-            return new ResponseEntity<String>(bre.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<String>("Ok", HttpStatus.OK);
-    }*/
-
-    //http://localhost:8080/createPost/message%20location%201%202%203%205%2056
-
     @Override
     @RequestMapping(path = "/createPost/{message}/{location}/{usersTagged}/{userPosted}/{userPagePosted}", method = RequestMethod.GET)
     public ResponseEntity<String> createPost(HttpServletRequest request, HttpSession session, @PathVariable(value = "message") String message,
