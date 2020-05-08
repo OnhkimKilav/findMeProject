@@ -46,6 +46,15 @@
                 <li th:text="${user[2]}"></li>
             </ul>
         </div>
+
+        <div>
+            <ul th:each="post : ${posts}" class="hr">
+                <li th:text="${post[0]}"></li>
+                <li th:text="${post[1]}"></li>
+                <li th:text="${post[2]}"></li>
+                <li th:text="${post[3]}"></li>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -53,6 +62,14 @@
 </body>
 
 <script>
+    $.ajax({
+        type: "GET",
+        url: "/displayPost",
+        data: {},
+        error: function error(xhr) {
+            alert(xhr.responseText);
+        }
+    });
 
     $.ajax({
         type: "GET",

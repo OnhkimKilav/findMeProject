@@ -2,29 +2,25 @@ package com.findme.controller.postController;
 
 import com.findme.exception.BadRequestException;
 import com.findme.exception.Validate;
-import com.findme.model.Post;
-import com.findme.model.User;
-import com.findme.service.postService.IPostServiceCreateImpl;
+import com.findme.service.postService.PostServiceCreateImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 
 @Controller
 public class PostControllerCreateImpl implements IPostControllerCreate {
-    private IPostServiceCreateImpl iPostServiceCreate;
+    private PostServiceCreateImpl iPostServiceCreate;
 
     @Autowired
-    public PostControllerCreateImpl(IPostServiceCreateImpl iPostServiceCreate) {
+    public PostControllerCreateImpl(PostServiceCreateImpl iPostServiceCreate) {
         this.iPostServiceCreate = iPostServiceCreate;
     }
 

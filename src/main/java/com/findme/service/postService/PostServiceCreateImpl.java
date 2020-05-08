@@ -18,13 +18,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class IPostServiceCreateImpl implements IPostServiceCreate {
+public class PostServiceCreateImpl implements IPostServiceCreate {
     private IServiceCRAD<Post> postIServiceCRAD;
     private ICRUDDAO<User> userICRUDDAO;
     private IUserDAORelationship userDAORelationship;
 
     @Autowired
-    public IPostServiceCreateImpl(IServiceCRAD<Post> postIServiceCRAD, ICRUDDAO<User> userICRUDDAO, IUserDAORelationship userDAORelationship) {
+    public PostServiceCreateImpl(IServiceCRAD<Post> postIServiceCRAD, ICRUDDAO<User> userICRUDDAO, IUserDAORelationship userDAORelationship) {
         this.postIServiceCRAD = postIServiceCRAD;
         this.userICRUDDAO = userICRUDDAO;
         this.userDAORelationship = userDAORelationship;
