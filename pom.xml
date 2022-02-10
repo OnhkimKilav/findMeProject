@@ -13,7 +13,7 @@
         <springframework.version>5.1.1.RELEASE</springframework.version>
         <springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
-        <hibernate.version>5.3.7.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
         <fasterxml.jackson-databind.version>2.9.4</fasterxml.jackson-databind.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
     </properties>
@@ -126,12 +126,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.6.Final</version>
+            <version>5.4.24.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.6.Final</version>
+            <version>5.4.24.Final</version>
         </dependency>
 
 
